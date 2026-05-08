@@ -55,6 +55,20 @@
 
 **NULL: AUC below 0.70 or 95% CI includes 0.5. DET-on-transformer-layers does not generalize at patent-default parameters. Report cleanly; no patent claim added.**
 
+## Patent context
+
+The pre-registered analysis was designed to answer a single, narrow question: does the existing DET integration-differentiation balance metric — as disclosed in **US Provisional Patent 64/029,658** (filed 2026-04-04, non-provisional conversion deadline 2027-04-04) — generalize to transformer language-model layer activations at patent-default parameters (N=5, theta=2.0, w_J=1.0, w_P=0.0)?
+
+A positive outcome would have supported adding a transformer-architecture embodiment to the non-provisional conversion of 64/029,658, claiming the same I-D balance machinery that classifies financial-market, space-weather, and EEG states (existing claimed AUCs 0.868, 0.932, 0.909 respectively) also classifies prompt-frame compliance vs derivation regime in transformer LMs.
+
+The null result means **no transformer-architecture embodiment is added** to the existing patent at conversion. The patent's already-claimed application domains (financial, geophysical, neurological, telecommunications, power grid, biological, social network, transportation, industrial process control, distributed computing — per claim 8) remain undisturbed; the AUCs reported in the existing patent application stand on their original validation domains. No claim is added; no claim is weakened.
+
+The negative scope finding here is itself useful prior art for the conversion: it documents that the inventor tested generalization to a high-value adjacent domain (transformer interpretability), found patent-default parameters did not extend to that substrate at the cell-level snapshot granularity, and chose not to broaden the claim language. This evidences good-faith bounded scoping rather than overreach during conversion.
+
+## Scope of this conclusion
+
+The null applies specifically to: cell-level, single-snapshot K/V effective rank as activity scalar, N=5 contiguous bands, w_J=1.0/w_P=0.0, on the 3 target models × 5 checkpoints × 3 frames = 45 cells. Whether DET-shaped signals exist in transformer activations under different feature choices, finer or coarser binning, time-axis-aware aggregation, or larger model panels is **not addressed** by the pre-registered analysis — those are open questions for exploratory follow-up, the results of which are scientifically valid as hypothesis-generating but cannot be claimed as confirmatory of any patent extension without a new pre-registration on independent data.
+
 ## Cell-level data
 
 See `results/det-on-layers-cells.csv` (45 rows).

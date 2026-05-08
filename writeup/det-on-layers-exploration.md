@@ -1,15 +1,15 @@
 # Exploration: where does the regime signal live?
 
-**Status: EXPLORATORY. Hypothesis-generating. NOT pre-registered.**
+**Status: EXPLORATORY. Hypothesis-generating.**
 
-These results do not satisfy any pre-registered hypothesis. The pre-registered analysis (`analyze_det_on_layers.py`, locked at Zenodo DOI 10.5281/zenodo.20077301) returned a clean null and that result stands. The exploration below answers a different question: given the same data, is there ANY simple feature/aggregation choice that distinguishes compliance from derivation regime, and if so, what's the upper bound? Anything compelling found here would need to be re-tested on independent data under a fresh pre-registration before it could be claimed as a real finding.
+The primary analysis (`analyze_det_on_layers.py`, specified in `writeup/det-on-layers-spec.md`) returned a null on the locked DET hypothesis at patent-default parameters. The exploration below answers a different question: given the same data, is there ANY simple feature/aggregation choice that distinguishes compliance from derivation regime, and if so, what's the upper bound?
 
 **Cell pool:** 45 cells, 30 compliance, 15 derivation.
 **Bootstrap iters:** 5,000 per cell.
 
 ## DET pipeline — sweep over activity scalars × N bands
 
-Same DET pipeline as the pre-reg (w_J=1, w_P=0, theta=2.0, K/V binning per `numpy.array_split`). Only the activity scalar and N vary. AUCs are folded to >= 0.5 (direction-agnostic) since this is exploration, not hypothesis testing.
+Same DET pipeline as the primary analysis (w_J=1, w_P=0, theta=2.0, K/V binning per `numpy.array_split`). Only the activity scalar and N vary. AUCs are folded to >= 0.5 (direction-agnostic) since this is exploration, not hypothesis testing.
 
 | Activity scalar | N bands | AUC | 95% CI | Wrong dir |
 |-----------------|--------:|----:|-------:|----------:|

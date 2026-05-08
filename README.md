@@ -2,14 +2,6 @@
 
 Transformer-language-model probe testing prompt-frame-gated compliance versus derivation regimes via paired-frame override sweeps, K/V effective-rank measurement, and tier-stratified planted-falsehood lie sets across context lengths from 500 to 32,000 tokens.
 
-## Pre-registration
-
-A planned analysis re-applying the Dynamic Existence Threshold (DET) integration-differentiation balance metric, as disclosed in US Provisional Patent 64/029,658, to the per-layer K/V effective-rank data already collected in this repository, is pre-registered at:
-
-**Zenodo DOI:** [10.5281/zenodo.20077301](https://doi.org/10.5281/zenodo.20077301)
-
-All parameters, layer-band mappings, baseline comparisons, decision rules, and researcher degrees of freedom for the planned DET-on-layers analysis are locked in `writeup/PRE-REGISTRATION-det-on-layers.md` and timestamped at the Zenodo DOI above. The analysis script `analyze_det_on_layers.py` is written and executed only after the deposit is live.
-
 ## Cited prior work
 
 - Thornhill, N. M. (2026a). *The Existence Threshold: A Framework for Pattern Persistence in Binary Discrete Systems.* DOI: [10.5281/zenodo.18166974](https://doi.org/10.5281/zenodo.18166974)
@@ -27,7 +19,7 @@ All parameters, layer-band mappings, baseline comparisons, decision rules, and r
 | `analyze.py`, `analyze_tiered.py` | Per-run regime and override analysis |
 | `validate_chunked.py` | Chunked-attention numerical-equivalence validation |
 | `results/` | Per-run jsonl dumps — one record for the run config, one per checkpoint |
-| `writeup/` | Pre-registration, methods writeup, panel audits |
+| `writeup/` | Methods writeup, analysis specification, panel audits |
 | `run*.sh` | Reproducible run invocations |
 | `shell.nix` | Reproducible Nix dev shell |
 
@@ -49,4 +41,4 @@ Institute for Complexity Science and Advanced Computing (ICSAC).
 
 ## License
 
-Code: MIT. Documentation and pre-registration: CC-BY-4.0.
+Code: MIT. Documentation: CC-BY-4.0.

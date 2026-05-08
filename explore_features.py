@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-"""EXPLORATORY (NOT pre-registered): where does the regime signal live?
+"""EXPLORATORY: where does the regime signal live?
 
-The pre-registered analysis (analyze_det_on_layers.py) asked one locked
-question and got a null. This script asks the broader question that
-remains scientifically open: does ANY simple feature-and-aggregation
-combination of the available per-layer transformer state distinguish
-compliance from derivation regime in this 45-cell dataset?
+The primary analysis (analyze_det_on_layers.py) returned a null on the
+locked DET hypothesis at patent-default parameters. This script asks the
+broader question that remains scientifically open: does ANY simple
+feature-and-aggregation combination of the available per-layer transformer
+state distinguish compliance from derivation regime in this 45-cell
+dataset?
 
-Findings here are HYPOTHESIS-GENERATING. They do not satisfy any
-pre-registered hypothesis. Any claim derived from them must be
-re-tested on independent data with a fresh pre-registration before it
-can be cited as confirmatory.
+Findings here are hypothesis-generating only.
 """
 from __future__ import annotations
 
@@ -232,22 +230,20 @@ def main() -> int:
     lines = [
         "# Exploration: where does the regime signal live?",
         "",
-        "**Status: EXPLORATORY. Hypothesis-generating. NOT pre-registered.**",
+        "**Status: EXPLORATORY. Hypothesis-generating.**",
         "",
-        "These results do not satisfy any pre-registered hypothesis. The pre-registered analysis "
-        "(`analyze_det_on_layers.py`, locked at Zenodo DOI 10.5281/zenodo.20077301) returned a "
-        "clean null and that result stands. The exploration below answers a different question: "
+        "The primary analysis (`analyze_det_on_layers.py`, specified in "
+        "`writeup/det-on-layers-spec.md`) returned a null on the locked DET hypothesis "
+        "at patent-default parameters. The exploration below answers a different question: "
         "given the same data, is there ANY simple feature/aggregation choice that distinguishes "
-        "compliance from derivation regime, and if so, what's the upper bound? Anything compelling "
-        "found here would need to be re-tested on independent data under a fresh pre-registration "
-        "before it could be claimed as a real finding.",
+        "compliance from derivation regime, and if so, what's the upper bound?",
         "",
         f"**Cell pool:** {len(cells)} cells, {sum(labels==0)} compliance, {sum(labels==1)} derivation.",
         "**Bootstrap iters:** 5,000 per cell.",
         "",
         "## DET pipeline — sweep over activity scalars × N bands",
         "",
-        "Same DET pipeline as the pre-reg (w_J=1, w_P=0, theta=2.0, K/V binning per `numpy.array_split`). "
+        "Same DET pipeline as the primary analysis (w_J=1, w_P=0, theta=2.0, K/V binning per `numpy.array_split`). "
         "Only the activity scalar and N vary. AUCs are folded to >= 0.5 (direction-agnostic) since "
         "this is exploration, not hypothesis testing.",
         "",

@@ -5,8 +5,8 @@
 **Drafted:** 2026-05-07
 **Status:** LOCKED via Zenodo deposit
 **Zenodo DOI:** [10.5281/zenodo.20077301](https://doi.org/10.5281/zenodo.20077301)
-**Commit timestamp:** _to be filled at final git commit_
-**Commit hash:** _to be filled at final git commit_
+**Initial commit:** `b11fe85ac04a0bfb870668c6633c25700cc63457` (2026-05-07)
+**Repo:** `existencethreshold/det-transformer-test`
 
 ---
 

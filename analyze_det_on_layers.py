@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """DET I-D Balance applied to transformer layer activations.
 
-Pre-registration: https://doi.org/10.5281/zenodo.20077301
-Pre-registration commit (in this repo): writeup/PRE-REGISTRATION-det-on-layers.md
+Specification: writeup/det-on-layers-spec.md
 Patent: US Provisional 64/029,658
 
-This script implements exactly the analysis specified in the pre-registration.
-Any deviation from pre-registered parameters voids the lock.
+This script implements the analysis described in the specification document
+above. Patent-default DET pipeline parameters: N=5, theta=2.0, w_J=1.0, w_P=0.0.
 """
 from __future__ import annotations
 
@@ -22,10 +21,7 @@ from scipy.spatial.distance import jensenshannon
 from scipy.stats import spearmanr
 from sklearn.metrics import roc_auc_score
 
-PRE_REG_DOI = "10.5281/zenodo.20077301"
-PRE_REG_URL = "https://doi.org/10.5281/zenodo.20077301"
-
-# === Pre-registered parameters (LOCKED) =====================================
+# === Pipeline parameters ===================================================
 TARGET_MODELS = {
     "Qwen/Qwen2.5-7B-Instruct",
     "meta-llama/Llama-3.1-8B-Instruct",
@@ -45,8 +41,8 @@ W_P = 0.0  # P term elided; setting permitted under patent claim 2
 AUC_THRESHOLD = 0.70
 BOOTSTRAP_ITERS = 10_000
 PERMUTATION_ITERS = 10_000
-RNG_SEED = 20260507  # locked seed for bootstrap and permutation reproducibility
-MIN_CELLS = 36       # below this, run is aborted per pre-reg
+RNG_SEED = 20260507  # fixed seed for bootstrap and permutation reproducibility
+MIN_CELLS = 36       # below this, run is aborted
 
 REPO_ROOT = Path(__file__).resolve().parent
 RESULTS_DIR = REPO_ROOT / "results"
@@ -55,15 +51,13 @@ CELLS_CSV = RESULTS_DIR / "det-on-layers-cells.csv"
 REPORT_MD = WRITEUP_DIR / "det-on-layers-results.md"
 
 
-# === Header sanity check (executed before any computation) ==================
+# === Header (executed before any computation) ===============================
 def _print_header() -> None:
     print(f"=== DET-on-Transformer-Layers Analysis ===")
-    print(f"Pre-registration DOI: {PRE_REG_DOI}")
-    print(f"Pre-registration URL: {PRE_REG_URL}")
-    pre_reg_md = WRITEUP_DIR / "PRE-REGISTRATION-det-on-layers.md"
-    if not pre_reg_md.exists():
-        sys.exit(f"FATAL: pre-registration document not found at {pre_reg_md}")
-    print(f"Pre-registration document: {pre_reg_md.relative_to(REPO_ROOT)}")
+    spec_md = WRITEUP_DIR / "det-on-layers-spec.md"
+    if not spec_md.exists():
+        sys.exit(f"FATAL: specification document not found at {spec_md}")
+    print(f"Specification: {spec_md.relative_to(REPO_ROOT)}")
     print()
 
 
@@ -177,11 +171,11 @@ def compute_B(I_vec: np.ndarray, D_vec: np.ndarray) -> np.ndarray:
     return np.abs(z(I_vec) - z(D_vec))
 
 
-# === AUC with pre-registered direction handling =============================
+# === AUC with specified direction handling =============================
 def directed_auc(scores: np.ndarray, labels: np.ndarray) -> tuple[float, bool]:
-    """Pre-registered direction: B HIGHER in derivation (label=1).
+    """Specified direction: B HIGHER in derivation (label=1).
     Returns (auc, wrong_direction_flag).
-    If wrong direction, AUC is reported as min(auc, 1-auc) per pre-reg.
+    If wrong direction, AUC is reported as min(auc, 1-auc) per spec.
     """
     auc = roc_auc_score(labels, scores)
     if auc < 0.5:
@@ -225,7 +219,7 @@ def apply_decision_rule(auc_pt: float, ci_lower: float,
         return "NEGATIVE: wrong-direction signal; no patent claim added."
     if auc_pt >= AUC_THRESHOLD and ci_lower > 0.5:
         if beats_baselines:
-            return ("POSITIVE: B classifies regime above pre-registered threshold "
+            return ("POSITIVE: B classifies regime above specified threshold "
                     "AND beats raw-feature baselines. "
                     "Add transformer embodiment to 64/029,658 conversion.")
         else:
@@ -271,8 +265,8 @@ def main() -> int:
     print(f"  compliance: {n_compliance}, derivation: {n_derivation}")
 
     if len(cells) < MIN_CELLS:
-        print(f"FATAL: cell count {len(cells)} below pre-registered minimum {MIN_CELLS}.")
-        print("Run aborted per pre-registration.")
+        print(f"FATAL: cell count {len(cells)} below minimum {MIN_CELLS}.")
+        print("Run aborted.")
         return 1
 
     rng = np.random.default_rng(RNG_SEED)
@@ -346,9 +340,9 @@ def main() -> int:
     lines = [
         "# DET-on-Transformer-Layers — Results",
         "",
-        f"**Pre-registration:** [{PRE_REG_DOI}]({PRE_REG_URL})",
         f"**Analysis script:** `analyze_det_on_layers.py` (this repo)",
-        "**Pipeline parameters (locked):** N=5, theta=2.0, w_J=1.0, w_P=0.0",
+        f"**Specification:** `writeup/det-on-layers-spec.md`",
+        "**Pipeline parameters:** N=5, theta=2.0, w_J=1.0, w_P=0.0",
         "",
         "## Cell pool",
         "",

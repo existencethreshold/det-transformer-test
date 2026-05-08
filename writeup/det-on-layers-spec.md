@@ -1,22 +1,21 @@
-# Pre-Registration: DET I-D Balance Applied to Transformer Layer Activations
+# Analysis Specification: DET I-D Balance Applied to Transformer Layer Activations
 
 **Author:** Nathan M. Thornhill
 **Affiliation:** Institute for Complexity Science and Advanced Computing (ICSAC)
-**Drafted:** 2026-05-07
-**Status:** LOCKED via Zenodo deposit
-**Zenodo DOI:** [10.5281/zenodo.20077301](https://doi.org/10.5281/zenodo.20077301)
-**Initial commit:** `b11fe85ac04a0bfb870668c6633c25700cc63457` (2026-05-07)
+**Date:** 2026-05-07
 **Repo:** `existencethreshold/det-transformer-test`
+
+This document specifies the analysis implemented by `analyze_det_on_layers.py`. It describes the parameters used, the eligibility filter, the decision rule, and the locked researcher choices. It is descriptive of what was tested, not a pre-registration.
 
 ---
 
 ## Purpose
 
-It is tested whether the Dynamic Existence Threshold (DET) integration-differentiation balance metric, computed under the parameters disclosed in US Provisional Patent 64/029,658, classifies behavioral regime in transformer language models when applied to per-layer K/V effective rank.
+The analysis tests whether the Dynamic Existence Threshold (DET) integration-differentiation balance metric, computed under the parameters disclosed in US Provisional Patent 64/029,658, classifies behavioral regime in transformer language models when applied to per-layer K/V effective rank.
 
-A positive result supports the addition of a transformer-architecture embodiment to the non-provisional conversion of 64/029,658 (deadline 2027-04-04). A null result is reported as a bounded-scope finding; no claim is added.
+A positive result would support the addition of a transformer-architecture embodiment to the non-provisional conversion of 64/029,658 (deadline 2027-04-04). A null result is a bounded-scope finding; no claim is added.
 
-## Hypothesis (locked before run)
+## Hypothesis
 
 **H1 (primary):** Cell-level DET balance metric `B`, computed on per-layer K/V effective rank binned into N=5 bands using patent-default parameters, classifies cells into compliance regime (instruct + instruct_no_repeat) vs derivation regime (verify) with AUC ≥ 0.70 (95% CI lower bound > 0.5).
 
@@ -36,7 +35,7 @@ Expected cell count: 3 models × 5 checkpoints × 3 frames = **45 cells**
 - Compliance class (instruct + instruct_no_repeat): 30
 - Derivation class (verify): 15
 
-If actual eligible files yield fewer cells, the pre-registered minimum is N≥36 (3 models × 5 checkpoints × either 2 or 3 frames complete). Below that, run is aborted, reported as insufficient data, no analysis performed.
+If actual eligible files yield fewer cells, the specified minimum is N≥36 (3 models × 5 checkpoints × either 2 or 3 frames complete). Below that, run is aborted, reported as insufficient data, no analysis performed.
 
 ## Activity scalar (locked)
 
@@ -68,7 +67,7 @@ This binning rule is locked. No alternative mappings (per-band layer count, fixe
 | w_J (evenness weight) | 1.0 | patent claim 2 (allowed setting) |
 | w_P (pattern diversity weight) | 0.0 | patent claim 2 (allowed setting) |
 
-**Note on w_J=1.0, w_P=0.0:** Patent claim 2 specifies w_J and w_P as "non-negative weights summing to 1," which permits this setting. The pattern-diversity term P is computed over W sub-windows of a time series; with one activity vector per cell (single forward-pass snapshot, no time axis), P is undefined. Setting w_P=0 elides the term while remaining within the patent's parameter space. This is a deliberate, pre-registered choice and not a post-hoc adaptation — it constrains the test to evaluate the evenness-driven half of the synergy metric only.
+**Note on w_J=1.0, w_P=0.0:** Patent claim 2 specifies w_J and w_P as "non-negative weights summing to 1," which permits this setting. The pattern-diversity term P is computed over W sub-windows of a time series; with one activity vector per cell (single forward-pass snapshot, no time axis), P is undefined. Setting w_P=0 elides the term while remaining within the patent's parameter space. This is a deliberate locked choice and not a post-hoc adaptation — it constrains the test to evaluate the evenness-driven half of the synergy metric only.
 
 **Pipeline (executed exactly as in patent claim 1, with elided P term):**
 1. `p_i = a_i / sum(a_j)`
@@ -81,7 +80,7 @@ This binning rule is locked. No alternative mappings (per-band layer count, fixe
 8. `D = sqrt(JSD(p, uniform_N))` where uniform_N = [1/N]·N
 9. **B per cell**: For the cross-cell test, `z(I)` and `z(D)` are computed using mean and std over the 45-cell pool (within-pool z-score). `B = |z(I) - z(D)|`.
 
-**No parameter tuning.** If any parameter is changed for any reason after run start, the pre-registration is voided and the result is reported as exploratory only.
+**No parameter tuning.** If any parameter is changed for any reason after run start, the analysis becomes exploratory and the result is reported as exploratory only.
 
 ## Endpoints
 
@@ -90,7 +89,7 @@ This binning rule is locked. No alternative mappings (per-band layer count, fixe
 
 - Computed via `sklearn.metrics.roc_auc_score`
 - 95% CI via 10,000-iteration bootstrap on cell labels (pairs resampled with replacement)
-- Direction: B *higher* in derivation class is the pre-registered direction. If B is higher in compliance class instead, AUC is reported as min(AUC, 1−AUC) and the result is treated as "wrong-direction signal" — reported but does not satisfy H1.
+- Direction: B *higher* in derivation class is the specified direction. If B is higher in compliance class instead, AUC is reported as min(AUC, 1−AUC) and the result is treated as "wrong-direction signal" — reported but does not satisfy H1.
 
 ### Secondary endpoints (reported, not decision-relevant)
 1. AUC of `B` per-model (3 separate AUCs with CIs)
@@ -99,7 +98,7 @@ This binning rule is locked. No alternative mappings (per-band layer count, fixe
 4. Robustness: AUC of `B` recomputed with attention entropy as activity scalar instead of K/V rank
 
 ### Baseline comparisons (decision-relevant context)
-Pre-registered baselines, computed identically:
+Locked baselines, computed identically:
 1. **AUC of mean K/V rank alone** (averaged across all 28-32 layers, no DET pipeline)
 2. **AUC of mean attention-to-anchor alone**
 3. **Permutation null:** AUC distribution under 10,000 random shuffles of the regime label
@@ -145,21 +144,3 @@ If the run yields a null at primary endpoint, retrying with any alternative on t
 - Runtime: <1 minute, single CPU
 - No model inference, no GPU
 
-## Sign-off
-
-Locking ceremony, executed in this exact order:
-
-1. Append commit timestamp above
-2. `git add` + `git commit` this file (records local timestamp + content hash)
-3. **Deposit to Zenodo (general, not ICSAC community) before any analysis is run.** The Zenodo DOI is the canonical lock; git commit is the redundant evidence layer.
-4. Append the minted Zenodo DOI to the header above; final git commit
-5. The analysis script `analyze_det_on_layers.py` is written only after the Zenodo deposit is live. Its first line echoes BOTH the git commit hash AND the Zenodo DOI of this pre-registration as runtime sanity checks
-6. The final results report cites the Zenodo DOI as evidence that pre-registration preceded analysis
-
----
-
-**Reviewer notes / objections (fill in before locking):**
-
-- [ ]
-- [ ]
-- [ ]

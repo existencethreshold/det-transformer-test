@@ -3,14 +3,16 @@ import numpy as np
 import os
 from collections import defaultdict
 
+RESULTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results")
+
 files = {
-    "SmolLM-135M": "/home/dietpi/det-transformer-test/results/20260504T054917Z_HuggingFaceTB_SmolLM2-135M-Instruct.jsonl",
-    "Qwen-1.5B": "/home/dietpi/det-transformer-test/results/20260505T061521Z_Qwen_Qwen2.5-1.5B-Instruct.jsonl",
-    "Qwen-3B": "/home/dietpi/det-transformer-test/results/20260507T002154Z_Qwen_Qwen2.5-3B-Instruct.jsonl",
-    "Qwen-7B-attn": "/home/dietpi/det-transformer-test/results/20260505T135700Z_Qwen_Qwen2.5-7B-Instruct.jsonl",
-    "Mistral-7B": "/home/dietpi/det-transformer-test/results/20260506T222407Z_mistralai_Mistral-7B-Instruct-v0.3.jsonl",
-    "OLMo-2-7B": "/home/dietpi/det-transformer-test/results/20260507T000322Z_allenai_OLMo-2-1124-7B-Instruct.jsonl",
-    "Llama-3.1-8B": "/home/dietpi/det-transformer-test/results/20260507T011103Z_meta-llama_Llama-3.1-8B-Instruct.jsonl"
+    "SmolLM-135M": os.path.join(RESULTS, "20260504T054917Z_HuggingFaceTB_SmolLM2-135M-Instruct.jsonl"),
+    "Qwen-1.5B": os.path.join(RESULTS, "20260505T061521Z_Qwen_Qwen2.5-1.5B-Instruct.jsonl"),
+    "Qwen-3B": os.path.join(RESULTS, "20260507T002154Z_Qwen_Qwen2.5-3B-Instruct.jsonl"),
+    "Qwen-7B-attn": os.path.join(RESULTS, "20260505T135700Z_Qwen_Qwen2.5-7B-Instruct.jsonl"),
+    "Mistral-7B": os.path.join(RESULTS, "20260506T222407Z_mistralai_Mistral-7B-Instruct-v0.3.jsonl"),
+    "OLMo-2-7B": os.path.join(RESULTS, "20260507T000322Z_allenai_OLMo-2-1124-7B-Instruct.jsonl"),
+    "Llama-3.1-8B": os.path.join(RESULTS, "20260507T011103Z_meta-llama_Llama-3.1-8B-Instruct.jsonl")
 }
 
 def load_data(filepath):

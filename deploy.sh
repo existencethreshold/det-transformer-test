@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# Deploy DET probe to a remote host (Optiplex2 by default; RunPod via env).
-# Env overrides:
-#   DET_HOST  — IP/hostname (default 100.96.25.59 = Optiplex2)
-#   DET_USER  — SSH user
+# Deploy the DET probe to a remote host (any SSH host, e.g. a cloud GPU pod).
+# Environment:
+#   DET_HOST  — IP/hostname (required)
+#   DET_USER  — SSH user (default: the local user)
 #   DET_PORT  — SSH port (default 22)
 #   DET_PATH  — remote path
 #   DET_KEY   — SSH key path (optional)
 set -euo pipefail
 cd "$(dirname "$0")"
 
-TARGET_HOST="${DET_HOST:-100.96.25.59}"
-TARGET_USER="${DET_USER:-nathan}"
+TARGET_HOST="${DET_HOST:?set DET_HOST to the target host}"
+TARGET_USER="${DET_USER:-$(id -un)}"
 TARGET_PORT="${DET_PORT:-22}"
-TARGET_PATH="${DET_PATH:-/home/nathan/det-transformer-test}"
+TARGET_PATH="${DET_PATH:-det-transformer-test}"
 KEY_ARG=""
 if [ -n "${DET_KEY:-}" ]; then
   KEY_ARG="-i ${DET_KEY}"
@@ -32,7 +32,7 @@ cat <<EOF
 deployed. on remote:
   ssh -p ${TARGET_PORT} ${TARGET_USER}@${TARGET_HOST}
   cd ${TARGET_PATH}
-  python experiment.py        # (Optiplex2: nix-shell --run "python experiment.py")
+  python experiment.py        # (on NixOS: nix-shell --run "python experiment.py")
 
 env overrides for runs:
   DET_MODEL="Qwen/Qwen2.5-1.5B-Instruct"
